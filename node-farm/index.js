@@ -36,6 +36,13 @@ const server = http.createServer((req, res) => {
     res.end("this is overview");
   } else if (pathName === "/product") {
     res.end("this is the product");
+  } else if (pathName === "/api") {
+    fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
+      const productData = JSON.parse();
+      res.writeHead(200, { "Content-type": "application/json" });
+
+      res.end(data);
+    });
   } else {
     res.end("Page not found!");
   }
