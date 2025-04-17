@@ -19,7 +19,7 @@ server.on("request", (req, res) => {
 
   readable.on("error", (err) => {
     console.log(err);
-    res.status(500);
+    res.statusCode(500);
     res.end("File not found");
   });
 });
