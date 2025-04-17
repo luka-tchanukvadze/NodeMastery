@@ -11,3 +11,8 @@ console.log(calc1.add(3, 5));
 // console.log(cacl2.add(2, 5));
 const { add, multiply } = require("./test-module-2");
 console.log(add(2, 5));
+
+// caching
+require("./test-module-3")();
+require("./test-module-3")();
+require("./test-module-3")();
