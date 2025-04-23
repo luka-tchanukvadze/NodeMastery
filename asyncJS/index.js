@@ -21,19 +21,19 @@ const writeFilePro = (file, data) => {
   });
 };
 
-readFilePro(`${__dirname}/dog.txt`).then((data) => {
-  console.log(`Breed: ${data}`);
+readFilePro(`${__dirname}/dog.txt`)
+  .then((data) => {
+    console.log(`Breed: ${data}`);
 
-  superagent
-    .get(`https://dog.ceo/api/breed/${data}/images/random`)
-    .then((res) => {
-      console.log(res.body.message);
+    return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+  })
+  .then((res) => {
+    console.log(res.body.message);
 
-      fs.writeFile("dog-img.txt", res.body.message, (err) => {
-        console.log("random dog image fetched");
-      });
-    })
-    .catch((err) => {
-      console.log(err.message);
+    fs.writeFile("dog-img.txt", res.body.message, (err) => {
+      console.log("random dog image fetched");
     });
-});
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
