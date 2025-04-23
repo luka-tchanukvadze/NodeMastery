@@ -12,7 +12,7 @@ const readFilePro = (file) => {
   });
 };
 
-fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
+readFilePro(`${__dirname}/dog.txt`).then((data) => {
   console.log(`Breed: ${data}`);
 
   superagent
