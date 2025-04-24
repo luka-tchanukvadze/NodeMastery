@@ -36,6 +36,8 @@ const getDogPic = async () => {
   } catch (error) {
     console.log(error.message);
   }
+
+  return "2: ready";
 };
 
 getDogPic();
@@ -57,3 +59,9 @@ getDogPic();
 //   .catch((err) => {
 //     console.log(err.message);
 //   });
+
+console.log("1: will get dog pics");
+getDogPic().then((x) => {
+  console.log(x);
+});
+console.log("3: done getting dog pics");
