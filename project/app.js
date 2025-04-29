@@ -1,9 +1,9 @@
 const fs = require('fs');
 const express = require('express');
-const { Torus } = require('lucide-react');
-
+const morgan = require('morgan');
 const app = express();
 
+// 1) Middlewares
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -21,6 +21,8 @@ app.use((req, res, next) => {
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
+
+// 2) Route Handlers
 
 const getAllTours = (req, res) => {
   console.log(req.requestTime);
@@ -104,6 +106,8 @@ const deleteTour = (req, res) => {
   });
 };
 
+// 4) Routes
+
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
@@ -112,6 +116,7 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+// 5) Starting Server
 const port = 3000;
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
