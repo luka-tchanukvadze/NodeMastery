@@ -51,7 +51,7 @@ testTour
     console.log(doc);
   })
   .catch((err) => {
-    console.log('Error❤️', err);
+    console.log('Error', err);
   });
 
 const port = process.env.PORT || 3000;
