@@ -31,10 +31,10 @@ const importData = async () => {
   try {
     await Tour.create(tours);
     console.log('Data sucessfully loaded');
-    process.exit();
   } catch (error) {
     console.log(error);
   }
+  process.exit();
 };
 
 // Delete all data from DB
@@ -42,10 +42,10 @@ const deleteData = async () => {
   try {
     await Tour.deleteMany();
     console.log('Data sucessfully deleted');
-    process.exit();
   } catch (error) {
     console.log(error);
   }
+  process.exit();
 };
 
 if (process.argv[2] === '--import') {
