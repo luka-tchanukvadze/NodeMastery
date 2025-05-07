@@ -1,3 +1,4 @@
+const { X } = require('lucide-react');
 const Tour = require('./../models/tourModel');
 
 exports.getAllTours = async (req, res) => {
@@ -25,6 +26,14 @@ exports.getAllTours = async (req, res) => {
       query = query.sort(sortBy);
     } else {
       query = query.sort('-createdAt');
+    }
+
+    // 3) Field limiting
+    if (req.query.fields) {
+      const fileds = req.query.fields.split(',').join(' ');
+      query = query.select(fileds);
+    } else {
+      query = query.select('-__v');
     }
 
     // Executed query
