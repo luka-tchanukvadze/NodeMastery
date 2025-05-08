@@ -9,13 +9,14 @@ exports.aliasTopTour = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = async (req, res) => {
-  try {
-    // Build query
-    console.log(req.query);
+class APIFeatures {
+  constructor(query, queryString) {
+    this.query = query;
+    this.queryString = queryString;
+  }
 
-    // 1 A) Filtering
-    const queryObj = { ...req.query };
+  filter() {
+    const queryObj = { ...this.queryString };
     const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
@@ -26,15 +27,45 @@ exports.getAllTours = async (req, res) => {
       (match) => `$${match}`
     );
 
-    let query = Tour.find(JSON.parse(queryStr));
+    this.query.find(JSON.parse(queryStr));
+  }
+
+  sort() {
+    if (this.queryString.sort) {
+      const sortBy = this.queryString.sort.split(',').join(' ');
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort('-createdAt');
+    }
+  }
+}
+
+exports.getAllTours = async (req, res) => {
+  try {
+    // Build query
+    console.log(req.query);
+
+    // 1 A) Filtering
+    // const queryObj = { ...req.query };
+    // const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    // excludeFields.forEach((el) => delete queryObj[el]);
+
+    // // 1 B) Advenced filtering
+    // let queryStr = JSON.stringify(queryObj);
+    // queryStr = queryStr.replace(
+    //   /\b(gte)|(gt)|(lte)|(lt)\b/g,
+    //   (match) => `$${match}`
+    // );
+
+    // let query = Tour.find(JSON.parse(queryStr));
 
     // 2) Sorting
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
-    }
+    // if (req.query.sort) {
+    //   const sortBy = req.query.sort.split(',').join(' ');
+    //   query = query.sort(sortBy);
+    // } else {
+    //   query = query.sort('-createdAt');
+    // }
 
     // 3) Field limiting
     if (req.query.fields) {
@@ -57,7 +88,9 @@ exports.getAllTours = async (req, res) => {
     }
 
     // Executed query
-    const tours = await query;
+    const features = new APIFeatures(Tour.find(), req.query).filter().sort();
+
+    const tours = await features.query;
 
     // Send response
     res.status(200).json({
