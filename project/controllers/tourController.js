@@ -28,6 +28,8 @@ class APIFeatures {
     );
 
     this.query.find(JSON.parse(queryStr));
+
+    return this;
   }
 
   sort() {
@@ -37,6 +39,34 @@ class APIFeatures {
     } else {
       this.query = this.query.sort('-createdAt');
     }
+
+    return this;
+  }
+
+  limitFields() {
+    if (this.queryString.fields) {
+      const fileds = this.queryString.fields.split(',').join(' ');
+      this.query = this.query.select(fileds);
+    } else {
+      this.query = this.query.select('-__v');
+    }
+
+    return this;
+  }
+
+  async paginate() {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 100;
+    const skip = (page - 1) * limit;
+
+    this.query = this.query.skip(skip).limit(limit);
+
+    if (this.queryString.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip >= numTours) throw new Error('This page does not exist');
+    }
+
+    return this;
   }
 }
 
@@ -68,24 +98,24 @@ exports.getAllTours = async (req, res) => {
     // }
 
     // 3) Field limiting
-    if (req.query.fields) {
-      const fileds = req.query.fields.split(',').join(' ');
-      query = query.select(fileds);
-    } else {
-      query = query.select('-__v');
-    }
+    // if (req.query.fields) {
+    //   const fileds = req.query.fields.split(',').join(' ');
+    //   query = query.select(fileds);
+    // } else {
+    //   query = query.select('-__v');
+    // }
 
     // 4) Pagination
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 100;
-    const skip = (page - 1) * limit;
+    // const page = req.query.page * 1 || 1;
+    // const limit = req.query.limit * 1 || 100;
+    // const skip = (page - 1) * limit;
 
-    query = query.skip(skip).limit(limit);
+    // query = query.skip(skip).limit(limit);
 
-    if (req.query.page) {
-      const numTours = await Tour.countDocuments();
-      if (skip >= numTours) throw new Error('This page does not exist');
-    }
+    // if (req.query.page) {
+    //   const numTours = await Tour.countDocuments();
+    //   if (skip >= numTours) throw new Error('This page does not exist');
+    // }
 
     // Executed query
     const features = new APIFeatures(Tour.find(), req.query).filter().sort();
