@@ -95,7 +95,8 @@ tourSchema.post(/^find/, function (docs, next) {
 
 // AGGREGATION middlewar
 tourSchema.pre('aggregate', function (next) {
-  console.log(this.pipeline());
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+
   next();
 });
 
