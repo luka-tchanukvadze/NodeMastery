@@ -90,4 +90,3 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currenthUser;
   next();
 });
-// i am working on Postman setup
