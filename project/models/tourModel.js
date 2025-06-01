@@ -122,14 +122,6 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
-// Embading
-// tourSchema.pre('save', async function (next) {
-//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
-//   this.guides = await Promise.all(guidesPromises);
-
-//   next();
-// });
-
 // QUERY middleware
 // tourSchema.pre('find', function (next) {
 tourSchema.pre(/^find/, function (next) {
