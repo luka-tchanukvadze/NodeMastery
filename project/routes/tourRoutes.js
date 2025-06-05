@@ -30,8 +30,4 @@ router
     tourController.deleteTour
   );
 
-// POST /tour/432dfsa/reviews
-// GET /tour/432dfsa/reviews
-// GET /tour/432dfsa/reviews/fdw324df
-
 module.exports = router;
