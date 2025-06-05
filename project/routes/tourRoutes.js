@@ -1,9 +1,12 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
 const authController = require('./../controllers/authController');
-const reviewController = require('./../controllers/reviewController');
+const reviewRouter = require('./../routes/reviewRoutes');
 
 const router = express.Router();
+
+router.use('/:tourId/reviews', reviewRouter);
+// Nested Route up
 
 router
   .route('/top-5-cheap')
@@ -30,13 +33,5 @@ router
 // POST /tour/432dfsa/reviews
 // GET /tour/432dfsa/reviews
 // GET /tour/432dfsa/reviews/fdw324df
-
-router
-  .route('/:tourId/reviews')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    reviewController.createReview
-  );
 
 module.exports = router;
