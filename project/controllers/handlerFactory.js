@@ -81,7 +81,7 @@ exports.getAll = (Model) =>
 
     // console.log(features.query);
 
-    const doc = await features.query;
+    const doc = await features.query.explain();
 
     // Send response
     res.status(200).json({
